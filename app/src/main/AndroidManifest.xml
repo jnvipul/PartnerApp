@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".customer.ui.CustomerListActivity">
+
+        </activity>
+        <activity android:name=".tables.ui.TableListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

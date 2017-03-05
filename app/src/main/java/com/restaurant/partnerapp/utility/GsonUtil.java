@@ -2,6 +2,8 @@ package com.restaurant.partnerapp.utility;
 
 import com.google.gson.Gson;
 
+import java.util.List;
+
 /**
  * Created by vJ on 3/6/17.
  */
@@ -18,4 +20,7 @@ public class GsonUtil {
     }
 
 
+    public static String dumpObject(List<Boolean> tables) {
+        return getGson().toJson(tables);
+    }
 }

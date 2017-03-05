@@ -1,15 +1,13 @@
-package com.restaurant.partnerapp.customer.ui;
+package com.restaurant.partnerapp.tables.ui;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.restaurant.partnerapp.ApplicationState;
 import com.restaurant.partnerapp.R;
 import com.restaurant.partnerapp.base.BaseActivity;
-import com.restaurant.partnerapp.customer.models.Customer;
-import com.restaurant.partnerapp.customer.presenters.CustomerListPresenter;
+import com.restaurant.partnerapp.tables.presenters.TableListPresenter;
 import com.restaurant.partnerapp.utility.RetrofitServiceGenerator;
 
 import java.util.List;
@@ -17,48 +15,41 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CustomerListActivity extends BaseActivity implements ICustomerListView {
-
-    @BindView(R.id.list)
-    ListView listView;
+public class TableListActivity extends BaseActivity implements ITableListView {
 
     @BindView(R.id.progressBar)
-    ProgressBar progressbar;
+    ProgressBar progressBar;
 
-    CustomerListPresenter presenter;
+
+    TableListPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customer_list);
-
+        setContentView(R.layout.activity_table_list);
         setup();
     }
 
     private void setup() {
-
-        // Butter Knife
         ButterKnife.bind(this);
-
         // presenter
-        // TODO : Use dagger to get retrofit
-        presenter = new CustomerListPresenter(RetrofitServiceGenerator.getCustomerDataService(ApplicationState.getInstance().getRetrofit()));
+        presenter = new TableListPresenter(RetrofitServiceGenerator.getTableDataService(ApplicationState.getInstance().getRetrofit()));
         presenter.attachView(this);
-        presenter.loadCustomerData();
+        presenter.loadTablesData();
     }
 
     @Override
     public void showProgressBar() {
-        progressbar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgressBar() {
-        progressbar.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
-    public void showCustomerList(List<Customer> data) {
+    public void showTableList(List<Boolean> data) {
 
     }
 
