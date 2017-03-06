@@ -24,17 +24,21 @@ public class TableListPresenter extends BasePresenter<ITableListView>{
     }
 
     public void loadTablesData(){
+        getView().showProgressBar();
         addSubscription(interactor.loadTablesData()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onLoadSuccess, this::onLoadFailure));
     }
 
-    private void onLoadSuccess(List<Boolean> tables) {
-        Logger.debug(GsonUtil.dumpObject(tables));
+    private void onLoadSuccess(List<Boolean> data) {
+        getView().hideProgressBar();
+        Logger.debug(GsonUtil.dumpObject(data));
+        getView().showTableList(data);
     }
 
     private void onLoadFailure(Throwable throwable) {
-        Logger.debug("Failed");
+        getView().hideProgressBar();
+        Logger.debug("Failed", throwable.getMessage());
     }
 }

@@ -24,11 +24,6 @@ public class CustomersDataInteractor {
     }
 
     public Observable<List<Customer>> fetchCustomerDataInteractor(){
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         Logger.debug("Main Thread", (Looper.getMainLooper().isCurrentThread()) + "");
         return service.loadCustomerData();
     }

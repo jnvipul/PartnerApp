@@ -1,6 +1,10 @@
 package com.restaurant.partnerapp.tables.ui;
 
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -20,6 +24,8 @@ public class TableListActivity extends BaseActivity implements ITableListView {
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
+    @BindView(R.id.recycler_view)
+    RecyclerView list;
 
     TableListPresenter presenter;
 
@@ -32,6 +38,15 @@ public class TableListActivity extends BaseActivity implements ITableListView {
 
     private void setup() {
         ButterKnife.bind(this);
+
+        list.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 4);
+        list.setLayoutManager(layoutManager);
+
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(list.getContext(),
+//                layoutManager.getOrientation());
+//        list.addItemDecoration(dividerItemDecoration);
+
         // presenter
         presenter = new TableListPresenter(RetrofitServiceGenerator.getTableDataService(ApplicationState.getInstance().getRetrofit()));
         presenter.attachView(this);
@@ -50,7 +65,7 @@ public class TableListActivity extends BaseActivity implements ITableListView {
 
     @Override
     public void showTableList(List<Boolean> data) {
-
+        list.setAdapter(new TableListAdapter(this, data));
     }
 
     @Override
