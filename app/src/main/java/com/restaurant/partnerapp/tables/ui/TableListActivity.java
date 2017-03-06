@@ -1,6 +1,7 @@
 package com.restaurant.partnerapp.tables.ui;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.widget.ProgressBar;
 import com.restaurant.partnerapp.ApplicationState;
 import com.restaurant.partnerapp.R;
 import com.restaurant.partnerapp.base.BaseActivity;
+import com.restaurant.partnerapp.customer.models.Customer;
 import com.restaurant.partnerapp.tables.presenters.TableListPresenter;
 import com.restaurant.partnerapp.utility.RetrofitServiceGenerator;
 
@@ -21,6 +23,8 @@ import butterknife.ButterKnife;
 
 public class TableListActivity extends BaseActivity implements ITableListView {
 
+    public static final String KEY_CUSTOMER = "KEY-CUSTOMER";
+
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
@@ -28,6 +32,7 @@ public class TableListActivity extends BaseActivity implements ITableListView {
     RecyclerView list;
 
     TableListPresenter presenter;
+    private Customer mCustomer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,11 @@ public class TableListActivity extends BaseActivity implements ITableListView {
 
     private void setup() {
         ButterKnife.bind(this);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle.containsKey(KEY_CUSTOMER)) {
+            mCustomer = bundle.getParcelable(KEY_CUSTOMER);
+        }
 
         list.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 4);

@@ -1,6 +1,10 @@
 package com.restaurant.partnerapp.customer.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -10,6 +14,7 @@ import com.restaurant.partnerapp.R;
 import com.restaurant.partnerapp.base.BaseActivity;
 import com.restaurant.partnerapp.customer.models.Customer;
 import com.restaurant.partnerapp.customer.presenters.CustomerListPresenter;
+import com.restaurant.partnerapp.tables.ui.TableListActivity;
 import com.restaurant.partnerapp.utility.RetrofitServiceGenerator;
 
 import java.util.List;
@@ -19,8 +24,8 @@ import butterknife.ButterKnife;
 
 public class CustomerListActivity extends BaseActivity implements ICustomerListView {
 
-    @BindView(R.id.list)
-    ListView listView;
+    @BindView(R.id.recycler_view)
+    RecyclerView list;
 
     @BindView(R.id.progressBar)
     ProgressBar progressbar;
@@ -39,6 +44,10 @@ public class CustomerListActivity extends BaseActivity implements ICustomerListV
 
         // Butter Knife
         ButterKnife.bind(this);
+
+        // RecyclerView
+        list.setLayoutManager(new LinearLayoutManager(this));
+        list.setHasFixedSize(true);
 
         // presenter
         // TODO : Use dagger to get retrofit
@@ -59,11 +68,17 @@ public class CustomerListActivity extends BaseActivity implements ICustomerListV
 
     @Override
     public void showCustomerList(List<Customer> data) {
-
+        list.setAdapter(new CustomerListAdapter(this, data));
     }
 
     @Override
     public void showLoadError(Throwable throwable) {
 
+    }
+
+    public void onCustomerClick(Customer customer) {
+        Intent intent = new Intent(this, TableListActivity.class);
+        intent.putExtra(TableListActivity.KEY_CUSTOMER, customer);
+        startActivity(intent);
     }
 }
