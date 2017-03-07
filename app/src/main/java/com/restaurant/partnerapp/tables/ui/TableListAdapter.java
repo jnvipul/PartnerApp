@@ -1,7 +1,7 @@
 package com.restaurant.partnerapp.tables.ui;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.database.Cursor;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,8 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.restaurant.partnerapp.R;
-
-import java.util.List;
+import com.restaurant.partnerapp.base.CursorRecyclerViewAdapter;
+import com.restaurant.partnerapp.database.TableContract;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,15 +21,12 @@ import butterknife.ButterKnife;
  * Created by vJ on 3/6/17.
  */
 
-public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.TableViewHolder> {
+public class TableListAdapter extends CursorRecyclerViewAdapter<TableListAdapter.TableViewHolder> {
 
-    List<Boolean> mDataSet;
-    Context mContext;
     private RecyclerView mRecyclerView;
 
-    public TableListAdapter(Context context, List<Boolean> mDataSet) {
-        this.mDataSet = mDataSet;
-        this.mContext = context;
+    public TableListAdapter(Context context, Cursor cursor) {
+        super(context, cursor);
     }
 
     @Override
@@ -41,21 +38,26 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
         return new TableViewHolder(view);
     }
 
+
     @Override
-    public void onBindViewHolder(TableListAdapter.TableViewHolder holder, int position) {
-        boolean isAvailable = mDataSet.get(position);
+    public void onBindViewHolder(TableListAdapter.TableViewHolder holder, Cursor cursor) {
+        boolean isAvailable = getTableAvailability(cursor);
         holder.text.setText(isAvailable + "");
         if (isAvailable) {
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.colorPrimary));
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
         } else {
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.cardview_shadow_start_color));
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.cardview_shadow_start_color));
         }
 
+//        onBindViewHolder(holder, cursor);
     }
 
-    @Override
-    public int getItemCount() {
-        return mDataSet.size();
+    private Boolean getTableAvailability(Cursor cursor) {
+        if (cursor == null) {
+            return null;
+        }
+        return cursor.getInt(cursor
+                .getColumnIndex(TableContract.TableAvailability.AVAILABLE)) == 1 ? true : false;
     }
 
 
@@ -72,8 +74,15 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
 
         @Override
         public void onClick(View view) {
-            int position = mRecyclerView.getChildLayoutPosition(view);
-            Toast.makeText(mContext, mDataSet.get(position) + "", Toast.LENGTH_SHORT).show();
+            if (getCursor() != null) {
+                int position = mRecyclerView.getChildLayoutPosition(view);
+                Cursor cursor = getCursor();
+                cursor.moveToPosition(position);
+                boolean isAvailable = getTableAvailability(cursor);
+                Toast.makeText(getContext(), isAvailable + " " + position, Toast.LENGTH_SHORT).show();
+            }
+
+//
         }
     }
 

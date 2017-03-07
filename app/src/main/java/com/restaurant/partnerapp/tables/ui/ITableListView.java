@@ -1,8 +1,8 @@
 package com.restaurant.partnerapp.tables.ui;
 
-import com.restaurant.partnerapp.base.IMvpView;
+import android.database.Cursor;
 
-import java.util.List;
+import com.restaurant.partnerapp.base.IMvpView;
 
 /**
  * Created by vJ on 3/6/17.
@@ -13,7 +13,7 @@ public interface ITableListView extends IMvpView {
 
     void hideProgressBar();
 
-    void showTableList(List<Boolean> data);
+    void showTableList(Cursor data);
 
     void showLoadError(Throwable throwable);
 

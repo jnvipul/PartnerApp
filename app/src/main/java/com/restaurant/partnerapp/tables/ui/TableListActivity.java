@@ -1,10 +1,9 @@
 package com.restaurant.partnerapp.tables.ui;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -13,10 +12,9 @@ import com.restaurant.partnerapp.ApplicationState;
 import com.restaurant.partnerapp.R;
 import com.restaurant.partnerapp.base.BaseActivity;
 import com.restaurant.partnerapp.customer.models.Customer;
+import com.restaurant.partnerapp.database.DBHelper;
 import com.restaurant.partnerapp.tables.presenters.TableListPresenter;
 import com.restaurant.partnerapp.utility.RetrofitServiceGenerator;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,6 +32,9 @@ public class TableListActivity extends BaseActivity implements ITableListView {
     TableListPresenter presenter;
     private Customer mCustomer;
 
+    // Database
+    SQLiteDatabase database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +45,11 @@ public class TableListActivity extends BaseActivity implements ITableListView {
     private void setup() {
         ButterKnife.bind(this);
 
+
+        // Database
+        initializeDatabase();
+
+        // Get Customer Info
         Bundle bundle = getIntent().getExtras();
         if (bundle.containsKey(KEY_CUSTOMER)) {
             mCustomer = bundle.getParcelable(KEY_CUSTOMER);
@@ -53,14 +59,15 @@ public class TableListActivity extends BaseActivity implements ITableListView {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 4);
         list.setLayoutManager(layoutManager);
 
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(list.getContext(),
-//                layoutManager.getOrientation());
-//        list.addItemDecoration(dividerItemDecoration);
-
         // presenter
-        presenter = new TableListPresenter(RetrofitServiceGenerator.getTableDataService(ApplicationState.getInstance().getRetrofit()));
+        presenter = new TableListPresenter(RetrofitServiceGenerator.getTableDataService(ApplicationState.getInstance().getRetrofit()), database);
         presenter.attachView(this);
-        presenter.loadTablesData();
+        presenter.getTablesFromDatabase();
+    }
+
+    private void initializeDatabase() {
+        DBHelper dbHelper = new DBHelper(this);
+        database = dbHelper.getWritableDatabase();
     }
 
     @Override
@@ -74,12 +81,17 @@ public class TableListActivity extends BaseActivity implements ITableListView {
     }
 
     @Override
-    public void showTableList(List<Boolean> data) {
+    public void showTableList(Cursor data) {
         list.setAdapter(new TableListAdapter(this, data));
+//        if (getAllTables().getCount() == 0) {
+//            addTables(data);
+//        }
+
     }
 
     @Override
     public void showLoadError(Throwable throwable) {
 
     }
+
 }
