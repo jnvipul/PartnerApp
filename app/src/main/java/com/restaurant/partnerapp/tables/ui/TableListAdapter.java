@@ -33,8 +33,6 @@ public class TableListAdapter extends CursorRecyclerViewAdapter<TableListAdapter
     public TableListAdapter.TableViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_table_list, parent, false);
-
-
         return new TableViewHolder(view);
     }
 
@@ -48,8 +46,6 @@ public class TableListAdapter extends CursorRecyclerViewAdapter<TableListAdapter
         } else {
             holder.itemView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.cardview_shadow_start_color));
         }
-
-//        onBindViewHolder(holder, cursor);
     }
 
     private Boolean getTableAvailability(Cursor cursor) {
@@ -82,7 +78,6 @@ public class TableListAdapter extends CursorRecyclerViewAdapter<TableListAdapter
                 Toast.makeText(getContext(), isAvailable + " " + position, Toast.LENGTH_SHORT).show();
             }
 
-//
         }
     }
 

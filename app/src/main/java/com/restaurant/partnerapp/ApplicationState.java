@@ -2,6 +2,7 @@ package com.restaurant.partnerapp;
 
 import android.app.Application;
 
+import com.facebook.stetho.Stetho;
 import com.restaurant.partnerapp.constants.Endpoints;
 
 import retrofit2.Retrofit;
@@ -30,6 +31,7 @@ public class ApplicationState extends Application {
 
     private void setup() {
         mInstance = this;
+        Stetho.initializeWithDefaults(this);
     }
 
     public Retrofit getRetrofit() {

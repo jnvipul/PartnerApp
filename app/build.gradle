@@ -105,4 +105,7 @@ dependencies {
 
     // SQLBrite
     compile 'com.squareup.sqlbrite:sqlbrite:1.1.1'
+
+    // Stetho
+    compile 'com.facebook.stetho:stetho:1.4.2'
 }
