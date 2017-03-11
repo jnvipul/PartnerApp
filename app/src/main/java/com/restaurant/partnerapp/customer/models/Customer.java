@@ -10,25 +10,23 @@ import com.restaurant.partnerapp.utility.GsonUtil;
  * Created by vJ on 3/6/17.
  */
 
-public class Customer implements Parcelable{
+public class Customer implements Parcelable {
     String customerFirstName;
     String customerLastName;
     long id;
+
+    public Customer(String customerFirstName, String customerLastName, long id) {
+        this.customerFirstName = customerFirstName;
+        this.customerLastName = customerLastName;
+        this.id = id;
+    }
 
     public String getCustomerFirstName() {
         return customerFirstName;
     }
 
-    public void setCustomerFirstName(String customerFirstName) {
-        this.customerFirstName = customerFirstName;
-    }
-
     public String getCustomerLastName() {
         return customerLastName;
-    }
-
-    public void setCustomerLastName(String customerLastName) {
-        this.customerLastName = customerLastName;
     }
 
     public long getId() {
@@ -38,7 +36,6 @@ public class Customer implements Parcelable{
     public void setId(long id) {
         this.id = id;
     }
-
 
 
     public static final Parcelable.Creator<Customer> CREATOR
