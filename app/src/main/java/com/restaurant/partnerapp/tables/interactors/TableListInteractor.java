@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.restaurant.partnerapp.ApplicationState;
+import com.restaurant.partnerapp.customer.models.Customer;
+import com.restaurant.partnerapp.database.DBHelper;
 import com.restaurant.partnerapp.database.TableContract;
 import com.restaurant.partnerapp.tables.network.TableDataService;
 
@@ -56,6 +59,33 @@ public class TableListInteractor {
                 });
 
 
-        }
+    }
 
+    public Observable<Cursor> makeTableReservation(int rowId, Customer customer) {
+        return Observable.fromCallable(new Callable<Object>() {
+            @Override
+            public Object call() throws Exception {
+                SQLiteDatabase db = DBHelper.getInstance(ApplicationState.getInstance()).getWritableDatabase();
+                ContentValues cv = new ContentValues();
+                cv.put(TableContract.TableAvailability.CUSTOMER_ID, customer.getId());
+                cv.put(TableContract.TableAvailability.CUSTOMER_FIRST_NAME, customer.getCustomerFirstName());
+                cv.put(TableContract.TableAvailability.CUSTOMER_LAST_NAME, customer.getCustomerLastName());
+                cv.put(TableContract.TableAvailability.AVAILABLE, 0);
+                int result = db.update(TableContract.TableAvailability.TABLE_NAME, cv, TableContract.TableAvailability._ID + "=" + rowId, null);
+                return Observable.just(result);
+            }
+        }).flatMap(new Func1<Object, Observable<Cursor>>() {
+            @Override
+            public Observable<Cursor> call(Object o) {
+                SQLiteDatabase database = DBHelper.getInstance(ApplicationState.getInstance()).getWritableDatabase();
+                return Observable.just(database.query(TableContract.TableAvailability.TABLE_NAME,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null));
+            }
+        });
+    }
 }

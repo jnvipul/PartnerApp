@@ -20,8 +20,8 @@ import java.util.concurrent.TimeUnit;
 public class ClearReservationsJobScheduler {
 
     // Time with job has to be rescheduled all the time
-    private static final int REMINDER_INTERVAL = (int) TimeUnit.SECONDS.convert(30, TimeUnit.SECONDS);
-    private static final int FLEXIBILITY = (int) TimeUnit.SECONDS.convert(30, TimeUnit.SECONDS);
+    private static final int REMINDER_INTERVAL = (int) TimeUnit.SECONDS.convert(2, TimeUnit.MINUTES);
+    private static final int FLEXIBILITY = (int) TimeUnit.SECONDS.convert(5, TimeUnit.SECONDS);
 
     private static final String JOB_TAG = "reset_reservations";
 
@@ -37,7 +37,7 @@ public class ClearReservationsJobScheduler {
                     .setLifetime(Lifetime.FOREVER)
                     .setRecurring(true)
                     .setReplaceCurrent(false)
-                    .setTrigger(Trigger.executionWindow(30, 60))
+                    .setTrigger(Trigger.executionWindow(REMINDER_INTERVAL, REMINDER_INTERVAL +FLEXIBILITY))
                     .build();
 
             int i = dispatcher.schedule(myJob);
@@ -45,6 +45,5 @@ public class ClearReservationsJobScheduler {
         } catch (Exception e) {
             Logger.debug(e.getMessage());
         }
-        Toast.makeText(context, "Scheduled job", Toast.LENGTH_LONG).show();
     }
 }

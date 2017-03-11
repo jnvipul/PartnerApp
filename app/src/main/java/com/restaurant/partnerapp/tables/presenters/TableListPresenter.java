@@ -4,10 +4,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.restaurant.partnerapp.base.BasePresenter;
+import com.restaurant.partnerapp.customer.models.Customer;
 import com.restaurant.partnerapp.tables.interactors.TableListInteractor;
 import com.restaurant.partnerapp.tables.network.TableDataService;
 import com.restaurant.partnerapp.tables.ui.ITableListView;
-import com.restaurant.partnerapp.utility.GsonUtil;
 import com.restaurant.partnerapp.utility.Logger;
 
 import java.util.List;
@@ -70,5 +70,20 @@ public class TableListPresenter extends BasePresenter<ITableListView> {
     private void onLoadFailure(Throwable throwable) {
         getView().hideProgressBar();
         Logger.debug("Failed", throwable.getMessage());
+    }
+
+    public void requestTableReservation(int rowId, Customer customer) {
+        interactor.makeTableReservation(rowId, customer)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onReservationSuccess, this::onReservationFailure);
+    }
+
+    private void onReservationFailure(Throwable t) {
+        Logger.debug(t.getMessage());
+    }
+
+    private void onReservationSuccess(Cursor cursor) {
+        getView().updateReservationStatuses(cursor);
     }
 }

@@ -37,6 +37,8 @@ public class TableListActivity extends BaseActivity implements ITableListView {
     // Database
     SQLiteDatabase database;
 
+    private TableListAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,12 +86,18 @@ public class TableListActivity extends BaseActivity implements ITableListView {
 
     @Override
     public void showTableList(Cursor data) {
-        list.setAdapter(new TableListAdapter(this, data));
+        mAdapter = new TableListAdapter(this, data);
+        list.setAdapter(mAdapter);
     }
 
     @Override
     public void showLoadError(Throwable throwable) {
 
+    }
+
+    @Override
+    public void updateReservationStatuses(Cursor cursor) {
+        mAdapter.swapCursor(cursor);
     }
 
     public void showAlreadyReservedDialog() {
@@ -109,7 +117,7 @@ public class TableListActivity extends BaseActivity implements ITableListView {
 
     }
 
-    public void showReservationDialog(Cursor cursor) {
+    public void showReservationDialog(int rowId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setMessage(R.string.reservation_confermation_text)
@@ -118,6 +126,7 @@ public class TableListActivity extends BaseActivity implements ITableListView {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // update details in the table
+                        presenter.requestTableReservation(rowId, mCustomer);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

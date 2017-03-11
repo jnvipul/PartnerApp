@@ -17,4 +17,5 @@ public interface ITableListView extends IMvpView {
 
     void showLoadError(Throwable throwable);
 
+    void updateReservationStatuses(Cursor cursor);
 }

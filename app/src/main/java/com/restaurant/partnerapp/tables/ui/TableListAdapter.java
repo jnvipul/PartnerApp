@@ -76,7 +76,8 @@ public class TableListAdapter extends CursorRecyclerViewAdapter<TableListAdapter
                 cursor.moveToPosition(position);
                 boolean isAvailable = getTableAvailability(cursor);
                 if (isAvailable) {
-                    ((TableListActivity)getContext()).showReservationDialog(cursor);
+                    ((TableListActivity)getContext()).showReservationDialog(cursor.getInt(cursor
+                            .getColumnIndex(TableContract.TableAvailability._ID)));
                 } else {
                     ((TableListActivity)getContext()).showAlreadyReservedDialog();
                 }
