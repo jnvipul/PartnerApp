@@ -22,6 +22,15 @@
         <activity android:name=".tables.ui.TableListActivity">
 
         </activity>
+
+        <service
+            android:name=".ClearReservationsService"
+            android:exported="false">
+            <intent-filter>
+
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

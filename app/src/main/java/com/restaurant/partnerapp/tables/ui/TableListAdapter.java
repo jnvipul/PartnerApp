@@ -75,7 +75,12 @@ public class TableListAdapter extends CursorRecyclerViewAdapter<TableListAdapter
                 Cursor cursor = getCursor();
                 cursor.moveToPosition(position);
                 boolean isAvailable = getTableAvailability(cursor);
-                Toast.makeText(getContext(), isAvailable + " " + position, Toast.LENGTH_SHORT).show();
+                if (isAvailable) {
+                    ((TableListActivity)getContext()).showReservationDialog(cursor);
+                } else {
+                    ((TableListActivity)getContext()).showAlreadyReservedDialog();
+                }
+
             }
 
         }

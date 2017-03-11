@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">PartnerApp</string>
+    <string name="already_reserved">Sorry, the table you requested is already reserved. Kindly pick another table.</string>
+    <string name="oops">Oops</string>
+    <string name="okay">Okay</string>
+    <string name="reservation_confirmation_header">Table Reservation</string>
+    <string name="reservation_confermation_text">Do you want to proceed with the reservation?</string>
+    <string name="proceed">Yes Please!</string>
+    <string name="cancel">Cancel</string>
 </resources>

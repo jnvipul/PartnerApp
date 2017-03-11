@@ -1,8 +1,10 @@
 package com.restaurant.partnerapp.tables.ui;
 
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -66,7 +68,7 @@ public class TableListActivity extends BaseActivity implements ITableListView {
     }
 
     private void initializeDatabase() {
-        DBHelper dbHelper = new DBHelper(this);
+        DBHelper dbHelper = DBHelper.getInstance(this);
         database = dbHelper.getWritableDatabase();
     }
 
@@ -83,10 +85,6 @@ public class TableListActivity extends BaseActivity implements ITableListView {
     @Override
     public void showTableList(Cursor data) {
         list.setAdapter(new TableListAdapter(this, data));
-//        if (getAllTables().getCount() == 0) {
-//            addTables(data);
-//        }
-
     }
 
     @Override
@@ -94,4 +92,42 @@ public class TableListActivity extends BaseActivity implements ITableListView {
 
     }
 
+    public void showAlreadyReservedDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(R.string.already_reserved)
+                .setTitle(R.string.oops)
+                .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Do Nothing
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
+    public void showReservationDialog(Cursor cursor) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(R.string.reservation_confermation_text)
+                .setTitle(R.string.reservation_confirmation_header)
+                .setPositiveButton(R.string.proceed, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // update details in the table
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Do Nothing
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 }

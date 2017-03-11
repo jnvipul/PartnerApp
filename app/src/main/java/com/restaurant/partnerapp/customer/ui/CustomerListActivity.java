@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.restaurant.partnerapp.ApplicationState;
+import com.restaurant.partnerapp.ClearReservationsJobScheduler;
 import com.restaurant.partnerapp.R;
 import com.restaurant.partnerapp.base.BaseActivity;
 import com.restaurant.partnerapp.customer.models.Customer;
@@ -54,6 +55,9 @@ public class CustomerListActivity extends BaseActivity implements ICustomerListV
         presenter = new CustomerListPresenter(RetrofitServiceGenerator.getCustomerDataService(ApplicationState.getInstance().getRetrofit()));
         presenter.attachView(this);
         presenter.loadCustomerData();
+
+        // Schedule job for clearing all reservations every 10 minutes
+        ClearReservationsJobScheduler.scheduleClearReservationsJob(this);
     }
 
     @Override
