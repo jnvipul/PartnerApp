@@ -1,14 +1,19 @@
 package com.restaurant.partnerapp;
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Looper;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.widget.Toast;
 
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
+import com.restaurant.partnerapp.customer.ui.CustomerListActivity;
 import com.restaurant.partnerapp.database.DBHelper;
 import com.restaurant.partnerapp.database.TableContract;
 import com.restaurant.partnerapp.utility.Logger;
@@ -35,7 +40,6 @@ public class ClearReservationsService extends JobService {
     @Override
     public boolean onStartJob(JobParameters job) {
         Logger.debug("Inside on start job");
-        Toast.makeText(getApplicationContext(), "Started job", Toast.LENGTH_LONG).show();
         Observable.fromCallable(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
@@ -55,7 +59,7 @@ public class ClearReservationsService extends JobService {
             @Override
             public Observable<?> call(Object o) {
                 Logger.debug("Main Thread in service = " + (Looper.myLooper() == Looper.getMainLooper()));
-                return null;
+                return Observable.just(1);
             }
         })
                 .subscribeOn(Schedulers.io())
@@ -66,16 +70,29 @@ public class ClearReservationsService extends JobService {
     }
 
     private void onUpdateSuccessful(Object o, JobParameters jobParameters) {
-        Toast.makeText(getApplicationContext(), "Finished job", Toast.LENGTH_LONG).show();
+
+
+        Logger.debug("Service - ", "inside on updateSuccessfull");
         // TODO - Remove after testing
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.table_available)
-                        .setContentTitle("Yayy!")
-                        .setContentText("Mission SuccessFul");
-        NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mNotifyMgr.notify((int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE), mBuilder.build());
+                        .setContentTitle("Reset Completed")
+                        .setContentText("All tables are now available!");
+        Intent resultIntent = new Intent(this, CustomerListActivity.class);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(CustomerListActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify((int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE), mBuilder.build());
 
         jobFinished(jobParameters, true);
     }
