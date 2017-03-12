@@ -76,7 +76,7 @@ public class ClearReservationsService extends JobService {
         // TODO - Remove after testing
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.table_available)
+                        .setSmallIcon(R.drawable.available)
                         .setContentTitle("Reset Completed")
                         .setContentText("All tables are now available!");
         Intent resultIntent = new Intent(this, CustomerListActivity.class);

@@ -111,4 +111,7 @@ dependencies {
 
     // Job Dispatcher
     compile 'com.firebase:firebase-jobdispatcher:0.5.2'
+
+    // Design
+    compile 'com.android.support:design:25.2.0'
 }

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -101,7 +102,7 @@ public class TableListActivity extends BaseActivity implements ITableListView {
     }
 
     public void showAlreadyReservedDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
 
         builder.setMessage(R.string.already_reserved)
                 .setTitle(R.string.oops)
@@ -118,7 +119,7 @@ public class TableListActivity extends BaseActivity implements ITableListView {
     }
 
     public void showReservationDialog(int rowId) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
 
         builder.setMessage(R.string.reservation_confermation_text)
                 .setTitle(R.string.reservation_confirmation_header)

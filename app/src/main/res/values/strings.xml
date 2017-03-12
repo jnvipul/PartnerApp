@@ -7,4 +7,7 @@
     <string name="reservation_confermation_text">Do you want to proceed with the reservation?</string>
     <string name="proceed">Yes Please!</string>
     <string name="cancel">Cancel</string>
+    <string name="action_search">Enter customer name</string>
+    <string name="book_now">Book Now</string>
+    <string name="booked">Booked</string>
 </resources>

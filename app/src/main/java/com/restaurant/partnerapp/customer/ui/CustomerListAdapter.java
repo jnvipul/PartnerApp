@@ -48,6 +48,13 @@ public class CustomerListAdapter extends RecyclerView.Adapter<CustomerListAdapte
         return mDataSet.size();
     }
 
+    public void replaceAll(List<Customer> filteredList) {
+        mDataSet.clear();
+        mDataSet.addAll(filteredList);
+        notifyDataSetChanged();
+
+    }
+
     public class CustomerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.name)

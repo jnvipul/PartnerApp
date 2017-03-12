@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,11 +42,15 @@ public class TableListAdapter extends CursorRecyclerViewAdapter<TableListAdapter
     @Override
     public void onBindViewHolder(TableListAdapter.TableViewHolder holder, Cursor cursor) {
         boolean isAvailable = getTableAvailability(cursor);
-        holder.text.setText(isAvailable + "");
+
         if (isAvailable) {
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+            holder.text.setText(getContext().getString(R.string.book_now));
+            holder.text.setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+            holder.item.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.available));
         } else {
-            holder.itemView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.cardview_shadow_start_color));
+            holder.text.setTextColor(ContextCompat.getColor(getContext(), R.color.cardview_dark_background));
+            holder.text.setText(getContext().getString(R.string.booked));
+            holder.item.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.not_available));
         }
     }
 
@@ -61,6 +67,9 @@ public class TableListAdapter extends CursorRecyclerViewAdapter<TableListAdapter
     public class TableViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.text)
         TextView text;
+
+        @BindView(R.id.item)
+        ImageView item;
 
         public TableViewHolder(View view) {
             super(view);
