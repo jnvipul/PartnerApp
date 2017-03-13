@@ -21,12 +21,10 @@ import rx.schedulers.Schedulers;
  */
 public class TableListPresenter extends BasePresenter<ITableListView> {
 
-    private final SQLiteDatabase database;
     TableListInteractor interactor;
 
-    public TableListPresenter(TableDataService service, SQLiteDatabase db) {
+    public TableListPresenter(TableDataService service) {
         interactor = new TableListInteractor(service);
-        this.database = db;
     }
 
     private void fetchTablesFromInternet() {
@@ -38,7 +36,7 @@ public class TableListPresenter extends BasePresenter<ITableListView> {
 
     public void getTablesFromDatabase() {
         getView().showProgressBar();
-        addSubscription(interactor.getTablesFromDB(database)
+        addSubscription(interactor.getTablesFromDB()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::fetchTablesFromInternetIfRequired));
@@ -56,7 +54,7 @@ public class TableListPresenter extends BasePresenter<ITableListView> {
     }
 
     private void onLoadSuccess(List<Boolean> data) {
-        addSubscription(interactor.addTablesToDatabase(data, database)
+        addSubscription(interactor.addTablesToDatabase(data)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Long>() {

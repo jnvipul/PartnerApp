@@ -35,9 +35,6 @@ public class TableListActivity extends BaseActivity implements ITableListView {
     TableListPresenter presenter;
     private Customer mCustomer;
 
-    // Database
-    SQLiteDatabase database;
-
     private TableListAdapter mAdapter;
 
     @Override
@@ -50,10 +47,6 @@ public class TableListActivity extends BaseActivity implements ITableListView {
     private void setup() {
         ButterKnife.bind(this);
 
-
-        // Database
-        initializeDatabase();
-
         // Get Customer Info
         Bundle bundle = getIntent().getExtras();
         if (bundle.containsKey(KEY_CUSTOMER)) {
@@ -65,14 +58,9 @@ public class TableListActivity extends BaseActivity implements ITableListView {
         list.setLayoutManager(layoutManager);
 
         // presenter
-        presenter = new TableListPresenter(RetrofitServiceGenerator.getTableDataService(ApplicationState.getInstance().getRetrofit()), database);
+        presenter = new TableListPresenter(RetrofitServiceGenerator.getTableDataService(ApplicationState.getInstance().getRetrofit()));
         presenter.attachView(this);
         presenter.getTablesFromDatabase();
-    }
-
-    private void initializeDatabase() {
-        DBHelper dbHelper = DBHelper.getInstance(this);
-        database = dbHelper.getWritableDatabase();
     }
 
     @Override

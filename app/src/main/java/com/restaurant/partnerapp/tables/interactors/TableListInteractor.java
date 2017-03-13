@@ -3,12 +3,14 @@ package com.restaurant.partnerapp.tables.interactors;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Looper;
 
 import com.restaurant.partnerapp.ApplicationState;
 import com.restaurant.partnerapp.customer.models.Customer;
 import com.restaurant.partnerapp.database.DBHelper;
 import com.restaurant.partnerapp.database.TableContract;
 import com.restaurant.partnerapp.tables.network.TableDataService;
+import com.restaurant.partnerapp.utility.Logger;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -23,20 +25,23 @@ public class TableListInteractor {
 
     TableDataService service;
 
+    SQLiteDatabase mDatabase;
+
     public TableListInteractor(TableDataService service) {
         this.service = service;
+        mDatabase = DBHelper.getInstance(ApplicationState.getInstance()).getWritableDatabase();
     }
 
     public Observable<List<Boolean>> fetchTablesFromInternet() {
         return service.fetchTablesData();
     }
 
-    public Observable<Cursor> getTablesFromDB(SQLiteDatabase database) {
+    public Observable<Cursor> getTablesFromDB() {
         return Observable.fromCallable(new Callable<Cursor>() {
 
             @Override
             public Cursor call() throws Exception {
-                return database.query(TableContract.TableAvailability.TABLE_NAME,
+                return mDatabase.query(TableContract.TableAvailability.TABLE_NAME,
                         null,
                         null,
                         null,
@@ -47,14 +52,14 @@ public class TableListInteractor {
         });
     }
 
-    public Observable<Long> addTablesToDatabase(List<Boolean> data, SQLiteDatabase database) {
+    public Observable<Long> addTablesToDatabase(List<Boolean> data) {
         return Observable.from(data)
                 .flatMap(new Func1<Boolean, Observable<Long>>() {
                     @Override
                     public Observable<Long> call(Boolean table) {
                         ContentValues cv = new ContentValues();
                         cv.put(TableContract.TableAvailability.AVAILABLE, table == true ? 1 : 0);
-                        return Observable.just(new Long(database.insert(TableContract.TableAvailability.TABLE_NAME, null, cv)));
+                        return Observable.just(new Long(mDatabase.insert(TableContract.TableAvailability.TABLE_NAME, null, cv)));
                     }
                 });
 

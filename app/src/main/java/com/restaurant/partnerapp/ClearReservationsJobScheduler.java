@@ -41,7 +41,6 @@ public class ClearReservationsJobScheduler {
                     .build();
 
             int i = dispatcher.schedule(myJob);
-            Logger.debug("Scheduling Job + " + i);
         } catch (Exception e) {
             Logger.debug(e.getMessage());
         }

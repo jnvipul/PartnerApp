@@ -39,7 +39,6 @@ public class ClearReservationsService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters job) {
-        Logger.debug("Inside on start job");
         Observable.fromCallable(new Callable<Object>() {
             @Override
             public Object call() throws Exception {
@@ -58,7 +57,6 @@ public class ClearReservationsService extends JobService {
         }).flatMap(new Func1<Object, Observable<?>>() {
             @Override
             public Observable<?> call(Object o) {
-                Logger.debug("Main Thread in service = " + (Looper.myLooper() == Looper.getMainLooper()));
                 return Observable.just(1);
             }
         })
@@ -71,8 +69,6 @@ public class ClearReservationsService extends JobService {
 
     private void onUpdateSuccessful(Object o, JobParameters jobParameters) {
 
-
-        Logger.debug("Service - ", "inside on updateSuccessfull");
         // TODO - Remove after testing
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
@@ -103,7 +99,6 @@ public class ClearReservationsService extends JobService {
 
     @Override
     public boolean onStopJob(JobParameters job) {
-        Logger.debug("Inside on stop job");
         return false;
     }
 }
