@@ -41,7 +41,7 @@ public class CustomerListActivity extends BaseActivity implements ICustomerListV
 
     CustomerListPresenter presenter;
     private CustomerListAdapter mAdapter;
-    private List<Customer> mCustomers;
+    private List<Customer> mCustomers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +58,14 @@ public class CustomerListActivity extends BaseActivity implements ICustomerListV
 
         // toolbar
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Customers");
         setSupportActionBar(toolbar);
 
         // RecyclerView
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setHasFixedSize(true);
+        mAdapter = new CustomerListAdapter(this, mCustomers);
+        list.setAdapter(mAdapter);
 
         // presenter
         // TODO : Use dagger to get retrofit
@@ -129,9 +132,8 @@ public class CustomerListActivity extends BaseActivity implements ICustomerListV
 
     @Override
     public void showCustomerList(List<Customer> data) {
-        this.mCustomers = new ArrayList<>(data);
-        mAdapter = new CustomerListAdapter(this, data);
-        list.setAdapter(mAdapter);
+        this.mCustomers.addAll(data);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override

@@ -29,7 +29,6 @@ public class CustomerListPresenter extends BasePresenter<ICustomerListView> {
 
     public void loadCustomerData() {
         getView().showProgressBar();
-        Logger.debug("Main Thread1", (Looper.getMainLooper().isCurrentThread()) + "");
         addSubscription(interactor.fetchCustomerDataInteractor()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -39,7 +38,6 @@ public class CustomerListPresenter extends BasePresenter<ICustomerListView> {
 
     private void onLoadSuccess(List<Customer> data) {
         getView().hideProgressBar();
-        Logger.debug("Main Thread2", (Looper.getMainLooper().isCurrentThread()) + "");
         Logger.debug("Inside onLoadSuccess");
         Logger.debug(GsonUtil.getGson().toJson(data));
         getView().showCustomerList(data);
