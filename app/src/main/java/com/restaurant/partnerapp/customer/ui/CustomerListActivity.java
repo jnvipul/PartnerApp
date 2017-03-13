@@ -19,6 +19,7 @@ import com.restaurant.partnerapp.ApplicationState;
 import com.restaurant.partnerapp.ClearReservationsJobScheduler;
 import com.restaurant.partnerapp.R;
 import com.restaurant.partnerapp.base.BaseActivity;
+import com.restaurant.partnerapp.customer.interactors.CustomersDataInteractor;
 import com.restaurant.partnerapp.customer.models.Customer;
 import com.restaurant.partnerapp.customer.presenters.CustomerListPresenter;
 import com.restaurant.partnerapp.tables.ui.TableListActivity;
@@ -69,7 +70,8 @@ public class CustomerListActivity extends BaseActivity implements ICustomerListV
 
         // presenter
         // TODO : Use dagger to get retrofit
-        presenter = new CustomerListPresenter(RetrofitServiceGenerator.getCustomerDataService(ApplicationState.getInstance().getRetrofit()));
+        presenter = new CustomerListPresenter(
+                new CustomersDataInteractor(RetrofitServiceGenerator.getCustomerDataService()));
         presenter.attachView(this);
         presenter.loadCustomerData();
 
@@ -85,7 +87,7 @@ public class CustomerListActivity extends BaseActivity implements ICustomerListV
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setQueryHint(getString(R.string.action_search));
         searchView.setOnQueryTextListener(this);
-        SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete)searchView
+        SearchView.SearchAutoComplete searchAutoComplete = (SearchView.SearchAutoComplete) searchView
                 .findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchAutoComplete.setHintTextColor(Color.WHITE);
 

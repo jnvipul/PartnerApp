@@ -21,15 +21,15 @@ import rx.functions.Func1;
 /**
  * Created by vJ on 3/6/17.
  */
-public class TableListInteractor {
+public class TableDataInteractor {
 
     TableDataService service;
 
     SQLiteDatabase mDatabase;
 
-    public TableListInteractor(TableDataService service) {
+    public TableDataInteractor(TableDataService service, SQLiteDatabase database) {
         this.service = service;
-        mDatabase = DBHelper.getInstance(ApplicationState.getInstance()).getWritableDatabase();
+        mDatabase = database;
     }
 
     public Observable<List<Boolean>> fetchTablesFromInternet() {

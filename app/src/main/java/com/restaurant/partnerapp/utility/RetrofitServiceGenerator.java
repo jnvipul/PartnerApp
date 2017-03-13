@@ -1,5 +1,6 @@
 package com.restaurant.partnerapp.utility;
 
+import com.restaurant.partnerapp.ApplicationState;
 import com.restaurant.partnerapp.customer.network.CustomerListService;
 import com.restaurant.partnerapp.tables.network.TableDataService;
 
@@ -11,7 +12,8 @@ import retrofit2.Retrofit;
 
 public class RetrofitServiceGenerator {
 
-    public static CustomerListService getCustomerDataService(Retrofit retrofit){
+    public static CustomerListService getCustomerDataService(){
+        Retrofit retrofit = ApplicationState.getInstance().getRetrofit();
         return retrofit.create(CustomerListService.class);
     }
 

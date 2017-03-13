@@ -3,9 +3,11 @@ package com.restaurant.partnerapp.tables.presenters;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.restaurant.partnerapp.ApplicationState;
 import com.restaurant.partnerapp.base.BasePresenter;
 import com.restaurant.partnerapp.customer.models.Customer;
-import com.restaurant.partnerapp.tables.interactors.TableListInteractor;
+import com.restaurant.partnerapp.database.DBHelper;
+import com.restaurant.partnerapp.tables.interactors.TableDataInteractor;
 import com.restaurant.partnerapp.tables.network.TableDataService;
 import com.restaurant.partnerapp.tables.ui.ITableListView;
 import com.restaurant.partnerapp.utility.Logger;
@@ -21,10 +23,11 @@ import rx.schedulers.Schedulers;
  */
 public class TableListPresenter extends BasePresenter<ITableListView> {
 
-    TableListInteractor interactor;
+    TableDataInteractor interactor;
 
-    public TableListPresenter(TableDataService service) {
-        interactor = new TableListInteractor(service);
+    public TableListPresenter(TableDataService service, SQLiteDatabase database) {
+        interactor = new TableDataInteractor(service,database);
+
     }
 
     private void fetchTablesFromInternet() {
@@ -42,13 +45,11 @@ public class TableListPresenter extends BasePresenter<ITableListView> {
                 .subscribe(this::fetchTablesFromInternetIfRequired));
     }
 
-    private void fetchTablesFromInternetIfRequired(Cursor cursor) {
-        Logger.debug("Table Count: " + cursor.getCount());
+    public void fetchTablesFromInternetIfRequired(Cursor cursor) {
         if (cursor.getCount() == 0) {
             fetchTablesFromInternet();
         } else {
             getView().hideProgressBar();
-            Logger.debug("Returning cursor");
             getView().showTableList(cursor);
         }
     }
@@ -71,10 +72,10 @@ public class TableListPresenter extends BasePresenter<ITableListView> {
     }
 
     public void requestTableReservation(int rowId, Customer customer) {
-        interactor.makeTableReservation(rowId, customer)
+        addSubscription(interactor.makeTableReservation(rowId, customer)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onReservationSuccess, this::onReservationFailure);
+                .subscribe(this::onReservationSuccess, this::onReservationFailure));
     }
 
     private void onReservationFailure(Throwable t) {

@@ -1,11 +1,8 @@
 package com.restaurant.partnerapp.customer.presenters;
 
-import android.os.Looper;
-
 import com.restaurant.partnerapp.base.BasePresenter;
 import com.restaurant.partnerapp.customer.interactors.CustomersDataInteractor;
 import com.restaurant.partnerapp.customer.models.Customer;
-import com.restaurant.partnerapp.customer.network.CustomerListService;
 import com.restaurant.partnerapp.customer.ui.ICustomerListView;
 import com.restaurant.partnerapp.utility.GsonUtil;
 import com.restaurant.partnerapp.utility.Logger;
@@ -21,15 +18,15 @@ import rx.schedulers.Schedulers;
 
 public class CustomerListPresenter extends BasePresenter<ICustomerListView> {
 
-    CustomersDataInteractor interactor;
+    CustomersDataInteractor mInteractor;
 
-    public CustomerListPresenter(CustomerListService service) {
-        interactor = new CustomersDataInteractor(service);
+    public CustomerListPresenter(CustomersDataInteractor interactor) {
+        mInteractor = interactor;
     }
 
     public void loadCustomerData() {
         getView().showProgressBar();
-        addSubscription(interactor.fetchCustomerDataInteractor()
+        addSubscription(mInteractor.fetchCustomerDataInteractor()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onLoadSuccess, this::onLoadFailure));

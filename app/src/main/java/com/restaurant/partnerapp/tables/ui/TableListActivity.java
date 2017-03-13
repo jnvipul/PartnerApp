@@ -58,7 +58,9 @@ public class TableListActivity extends BaseActivity implements ITableListView {
         list.setLayoutManager(layoutManager);
 
         // presenter
-        presenter = new TableListPresenter(RetrofitServiceGenerator.getTableDataService(ApplicationState.getInstance().getRetrofit()));
+        SQLiteDatabase database = DBHelper.getInstance(ApplicationState.getInstance()).getWritableDatabase();
+        presenter = new TableListPresenter(RetrofitServiceGenerator
+                .getTableDataService(ApplicationState.getInstance().getRetrofit()), database);
         presenter.attachView(this);
         presenter.getTablesFromDatabase();
     }
