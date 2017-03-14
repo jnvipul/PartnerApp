@@ -18,3 +18,6 @@
 * At least one instrumentational test
 * Gradle 
 
+## Design
+* A very minimal design approach is used. Material design principle have been followed. 
+
