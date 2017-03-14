@@ -1,4 +1,7 @@
 # PartnerApp
+
+## App Demo video link - https://www.dropbox.com/s/gg826rj3go91ajq/2017_03_14_05_33_47_05_56_48.mp4?dl=0
+
 ## Architechture -:
 * Using Clean Architecture
 * MVP(Model View Presenter) pattern
@@ -20,4 +23,8 @@
 
 ## Design
 * A very minimal design approach is used. Material design principle have been followed. 
+
+## Code
+* A notification added when reset all reservations every 10 minutes for simplicity(Just for debugging and testing)
+* Reset time can be changed to play around in ```ClearReservationsJobScheduler``` class
 
